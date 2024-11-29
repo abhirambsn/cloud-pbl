@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, session, url_for, jsonify
+from flask import Flask, render_template, request, redirect, session, url_for, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
-from utils import init_db, get_user_by_username, add_user, upload_to_s3, list_s3_objects
+from utils import init_db, get_user_by_username, add_user, upload_to_s3, list_s3_objects, get_s3_object
 import os
 from dotenv import load_dotenv
+from io import BytesIO
 
 load_dotenv()
 
@@ -39,7 +40,7 @@ def login():
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        password = generate_password_hash(request.form['password'])
+        password = generate_password_hash(request.form['password'], 'pbkdf2')
         if get_user_by_username(username):
             return 'Username already exists'
         add_user(username, password)
@@ -55,11 +56,17 @@ def upload_file():
     upload_to_s3(file, os.getenv('S3_BUCKET_NAME', 'file-manager-bucket'))
     return redirect(url_for('index'))
 
+# Download File
+@app.route('/download/<filename>', methods=['GET'])
+def download_file(filename):
+    file_obj = get_s3_object(filename, os.getenv('S3_BUCKET_NAME', 'file-manager-bucket'))
+    if not file_obj:
+        return 'File not found', 404
+    file_content = file_obj['Body'].read()
+    return send_file(BytesIO(file_content), as_attachment=True, download_name=filename)
+
 # Logout
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)

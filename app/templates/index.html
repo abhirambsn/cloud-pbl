@@ -8,7 +8,9 @@
     <h2>Your Files:</h2>
     <ul>
         {% for file in files %}
-            <li>{{ file }}</li>
+            <li>
+                {{ file }} - <a href="{{ url_for('download_file', filename=file) }}">Download</a>
+            </li>
         {% endfor %}
     </ul>
     <form action="/upload" method="POST" enctype="multipart/form-data">

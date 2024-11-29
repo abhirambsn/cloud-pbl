@@ -1,12 +1,15 @@
 import psycopg2
 
 def init_db():
+    print("Starting DB Connection")
     conn = psycopg2.connect(
-        host="localhost",
+        host="localhost.localstack.cloud",
+        port=4510,
         database="file_manager",
         user="admin",
         password="password"
     )
+    print("Connected to RDS")
     cur = conn.cursor()
     cur.execute('''
         CREATE TABLE IF NOT EXISTS users (
@@ -22,6 +25,7 @@ def init_db():
 def get_user_by_username(username):
     conn = psycopg2.connect(
         host="localhost",
+        port=4510,
         database="file_manager",
         user="admin",
         password="password"
@@ -36,6 +40,7 @@ def get_user_by_username(username):
 def add_user(username, password):
     conn = psycopg2.connect(
         host="localhost",
+        port=4510,
         database="file_manager",
         user="admin",
         password="password"

@@ -1,10 +1,14 @@
 import boto3
 from botocore.exceptions import ClientError
 
+print("Setting up S3 Client")
+
 s3_client = boto3.client(
     's3',
-    endpoint_url='http://localstack:4566',
-    region_name='us-east-1'
+    endpoint_url='http://localhost:4566',
+    region_name='us-east-1',
+    aws_access_key_id='test',
+    aws_secret_access_key='test'
 )
 
 def upload_to_s3(file, bucket_name):
@@ -21,3 +25,9 @@ def list_s3_objects(bucket_name):
         return [obj['Key'] for obj in response.get('Contents', [])]
     except ClientError as e:
         return []
+
+def get_s3_object(key, bucket_name):
+    try:
+        return s3_client.get_object(Bucket=bucket_name, Key=key)
+    except ClientError as e:
+        return None
