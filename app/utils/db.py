@@ -1,9 +1,10 @@
 import psycopg2
+import os
 
 def init_db():
     print("Starting DB Connection")
     conn = psycopg2.connect(
-        host="localhost.localstack.cloud",
+        host=os.getenv('DB_HOST', 'localhost'),
         port=4510,
         database="file_manager",
         user="admin",

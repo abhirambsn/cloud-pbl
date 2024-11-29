@@ -5,4 +5,4 @@ git pull
 docker build -t cloud-lab-app:latest .
 
 # Run docker-compose
-docker-compose up -d
+docker compose up -d
