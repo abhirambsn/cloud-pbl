@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, session, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from db_setup import init_db, get_user_by_username, add_user
-from s3_utils import upload_to_s3, list_s3_objects
+from utils import init_db, get_user_by_username, add_user, upload_to_s3, list_s3_objects
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'
+app.secret_key = os.getenv('SECRET_KEY', 'supersecret')
 
 # Database setup
 init_db()

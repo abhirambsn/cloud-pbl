@@ -3,6 +3,7 @@ from botocore.exceptions import ClientError
 
 s3_client = boto3.client(
     's3',
+    endpoint_url='http://localstack:4566',
     region_name='us-east-1'
 )
 
