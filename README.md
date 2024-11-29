@@ -83,7 +83,7 @@ aws ec2 authorize-security-group-ingress \
 aws ec2 authorize-security-group-ingress \
     --group-name local-security-group \
     --protocol tcp \
-    --port 80 \
+    --port 8000 \
     --cidr 0.0.0.0/0 \
     --endpoint-url http://localhost:4566 \
     --profile local

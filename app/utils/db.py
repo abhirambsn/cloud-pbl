@@ -25,7 +25,7 @@ def init_db():
 
 def get_user_by_username(username):
     conn = psycopg2.connect(
-        host="localhost",
+        host=os.getenv('DB_HOST', 'localhost'),
         port=4510,
         database="file_manager",
         user="admin",
@@ -40,7 +40,7 @@ def get_user_by_username(username):
 
 def add_user(username, password):
     conn = psycopg2.connect(
-        host="localhost",
+        host=os.getenv('DB_HOST', 'localhost'),
         port=4510,
         database="file_manager",
         user="admin",
